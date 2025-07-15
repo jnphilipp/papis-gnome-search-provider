@@ -1,0 +1,1 @@
+# Papis GNOME search provider
