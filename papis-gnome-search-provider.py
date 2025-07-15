@@ -20,7 +20,6 @@
 import dbus
 import dbus.service
 import os
-import sys
 
 from dbus.mainloop.glib import DBusGMainLoop
 from gi.repository import GLib
@@ -56,11 +55,8 @@ class PapisSearchService(dbus.service.Object):
         """Activate result item."""
         doc = self._get_document(identifier)
         if doc is not None:
-            if len(doc.get_files) > 0:
-                if sys.platform == "linux":
-                    os.system(f'xdg-open "{doc.get_files()[0]}"')
-                else:
-                    os.system(f'open "{doc.get_files()[0]}"')
+            if len(doc.get_files()) > 0:
+                os.system(f'xdg-open "{doc.get_files()[0]}"')
 
     @dbus.service.method(in_signature="as", terms="as", out_signature="as", **sbn)
     def GetInitialResultSet(self, terms: list[str]) -> list[str]:  # noqa: N802
@@ -74,7 +70,7 @@ class PapisSearchService(dbus.service.Object):
         """Get result metas."""
         metas: list[dict] = []
         for identifier in identifiers:
-            obj = self._get_obj(identifier)
+            obj = self._get_document(identifier)
             if obj is None:
                 metas.append({"id": identifier})
             else:
@@ -82,9 +78,10 @@ class PapisSearchService(dbus.service.Object):
                     {
                         "id": identifier,
                         "name": obj["title"],
-                        "description": obj["abstract"] if "abstract" in obj else None,
                     }
                 )
+                if "abstract" in obj and obj["abstract"]:
+                    metas[-1]["description"] = obj["abstract"]
         return metas
 
     @dbus.service.method(
@@ -105,7 +102,7 @@ class PapisSearchService(dbus.service.Object):
         """Launch search."""
         pass
 
-    def _get_obj(self, papis_id: str) -> Document | None:
+    def _get_document(self, papis_id: str) -> Document | None:
         results = get_documents_in_lib(search={"papis_id": papis_id})
         return results[0] if len(results) == 1 else None
 
