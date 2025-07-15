@@ -1,0 +1,4 @@
+[D-BUS Service]
+Name=org.gnome.papis.SearchProvider
+Exec=papis-gnome-search-provider
+SystemdService=org.gnome.papis.SearchProvider.service

@@ -1,0 +1,7 @@
+[Unit]
+Description=papis search provider for GNOME Shell daemon
+
+[Service]
+Type=dbus
+BusName=org.gnome.papis.SearchProvider
+ExecStart=papis-gnome-search-provider
