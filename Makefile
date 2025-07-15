@@ -22,12 +22,14 @@ clean:
 	$(Q)find . -depth -name __pycache__ -type d -exec rm -rf {} \;
 
 
-install: papis-gnome-search-provider build/changelog.Debian.gz build/copyright org.gnome.papis.SearchProvider.ini org.gnome.papis.SearchProvider.service.dbus org.gnome.papis.SearchProvider.service.systemd
-	$(Q)install -Dm 0755 papis-gnome-search-provider "${DEST_DIR}${BIN_DIR}"/papis-gnome-search-provider
+install: papis-gnome-search-provider.py build/changelog.Debian.gz build/copyright build/org.gnome.papis.SearchProvider.svg org.gnome.papis.SearchProvider.ini org.gnome.papis.SearchProvider.service.dbus org.gnome.papis.SearchProvider.service.systemd org.gnome.papis.SearchProvider.desktop
+	$(Q)install -Dm 0755 papis-gnome-search-provider.py "${DEST_DIR}${BIN_DIR}"/papis-gnome-search-provider
 	$(Q)install -Dm 0644 build/changelog.Debian.gz "${DEST_DIR}${DOC_DIR}"/papis-gnome-search-provider/changelog.Debian.gz
 	$(Q)install -Dm 0644 build/copyright "${DEST_DIR}${DOC_DIR}"/papis-gnome-search-provider/copyright
+	$(Q)install -Dm 0644 build/org.gnome.papis.SearchProvider.svg "${DEST_DIR}/${ICON_DIR}"/hicolor/scalable/apps/org.gnome.papis.SearchProvider.svg
 	$(Q)install -Dm 0644 LICENSE "${DEST_DIR}${DOC_DIR}"/papis-gnome-search-provider/LICENSE
 	$(Q)install -Dm 0644 org.gnome.papis.SearchProvider.ini "${DEST_DIR}${SHARE_DIR}"/gnome-shell/search-providers/org.gnome.papis.SearchProvider.ini
+	$(Q)install -Dm 0644 org.gnome.papis.SearchProvider.desktop "${DEST_DIR}${SHARE_DIR}"/applications/org.gnome.papis.SearchProvider.desktop
 	$(Q)install -Dm 0644 org.gnome.papis.SearchProvider.service.dbus "${DEST_DIR}${SHARE_DIR}"/dbus-1/services/org.gnome.papis.SearchProvider.service
 	$(Q)install -Dm 0644 org.gnome.papis.SearchProvider.service.systemd "${DEST_DIR}${SYSTEMD_DIR}"/org.gnome.papis.SearchProvider.service
 	@echo "papis-gnome-search-provider install completed."
@@ -36,9 +38,11 @@ install: papis-gnome-search-provider build/changelog.Debian.gz build/copyright o
 uninstall:
 	$(Q)rm -r "${DEST_DIR}${DOC_DIR}"/papis-gnome-search-provider
 	$(Q)rm "${DEST_DIR}${BIN_DIR}"/papis-gnome-search-provider
+	$(Q)rm "${DEST_DIR}${SHARE_DIR}"/applications/org.gnome.papis.SearchProvider.desktop
 	$(Q)rm "${DEST_DIR}${SHARE_DIR}"/gnome-shell/search-providers/org.gnome.papis.SearchProvider.ini
 	$(Q)rm "${DEST_DIR}${SHARE_DIR}"/dbus-1/services/org.gnome.papis.SearchProvider.service
 	$(Q)rm "${DEST_DIR}${SYSTEMD_DIR}"/org.gnome.papis.SearchProvider.service
+	$(Q)rm "${DEST_DIR}${ICON_DIR}"/hicolor/scalable/apps/org.gnome.papis.SearchProvider.svg
 	@echo "papis-gnome-search-provider uninstall completed."
 
 
@@ -119,3 +123,7 @@ build/changelog.Debian.gz: build
 		done \
 	)
 	$(Q)cat build/changelog | gzip -n9 > build/changelog.Debian.gz
+
+
+build/org.gnome.papis.SearchProvider.svg:
+	$(Q)wget https://raw.githubusercontent.com/papis/papis/refs/heads/main/resources/logo.svg -O build/org.gnome.papis.SearchProvider.svg
