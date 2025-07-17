@@ -27,6 +27,16 @@ from papis.api import get_all_documents_in_lib, get_documents_in_lib
 from papis.document import Document
 
 
+__app_name__ = "papis-gnome-search-provider"
+__author__ = "J. Nathanael Philipp"
+__email__ = "nathanael@philipp.land"
+__copyright__ = "Copyright 2025 J. Nathanael Philipp (jnphilipp)"
+__license__ = "GPLv3"
+__version_info__ = (0, 1, 0)
+__version__ = ".".join(str(e) for e in __version_info__)
+__github__ = "https://github.com/jnphilipp/papis-gnome-search-provider"
+
+
 search_bus_name = "org.gnome.Shell.SearchProvider2"
 sbn = dict(dbus_interface=search_bus_name)
 
