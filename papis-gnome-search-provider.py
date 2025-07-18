@@ -110,7 +110,7 @@ class PapisSearchService(dbus.service.Object):
     @dbus.service.method(in_signature="asu", terms="as", timestamp="u", **sbn)
     def LaunchSearch(self, terms: list[str], timestamp: int) -> None:  # noqa: N802
         """Launch search."""
-        pass
+        os.system(f'kgx --command=\'papis list "{" ".join(terms)}"\'')
 
     def _get_document(self, papis_id: str) -> Document | None:
         results = get_documents_in_lib(search={"papis_id": papis_id})
